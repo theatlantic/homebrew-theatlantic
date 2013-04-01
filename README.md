@@ -4,6 +4,6 @@
 
 Tap the `homebrew-atlantic` repository into your brew installation:
 
-    brew tap theatlantic/homebrew-atlantic
+    brew tap theatlantic/atlantic
 
 That's it!
