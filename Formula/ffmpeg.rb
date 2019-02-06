@@ -3,18 +3,10 @@ class Ffmpeg < Formula
   homepage "https://ffmpeg.org/"
   url "https://ffmpeg.org/releases/ffmpeg-4.1.tar.xz"
   sha256 "a38ec4d026efb58506a99ad5cd23d5a9793b4bf415f2c4c2e9c1bb444acd1994"
-  revision 1
+  revision 2
   head "https://github.com/FFmpeg/FFmpeg.git"
 
-  bottle do
-    sha256 "b5768a085fcbd0515e0be2b08896780b060ade54e4f2472dfa5ef234b180c7f6" => :mojave
-    sha256 "7259051adf56ca05922881b1189863f1f2c6ccce3c61a59b1d8f1336a598c75d" => :high_sierra
-    sha256 "2e48a23ff807683a78b1792101e39a39cf6ace0e525afefe7109beb421c19034" => :sierra
-  end
-
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
-  option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
-  option "with-libass", "Enable ASS/SSA subtitle format"
   option "with-librsvg", "Enable SVG files as inputs via librsvg"
   option "with-libsoxr", "Enable the soxr resample library"
   option "with-libssh", "Enable SFTP protocol via libssh"
@@ -23,7 +15,6 @@ class Ffmpeg < Formula
   option "with-opencore-amr", "Enable Opencore AMR NR/WB audio format"
   option "with-openh264", "Enable OpenH264 library"
   option "with-openjpeg", "Enable JPEG 2000 image format"
-  option "with-openssl", "Enable SSL support"
   option "with-rtmpdump", "Enable RTMP protocol"
   option "with-rubberband", "Enable rubberband library"
   option "with-webp", "Enable using libwebp to encode WEBP images"
@@ -39,9 +30,13 @@ class Ffmpeg < Formula
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
 
+  depends_on "fdk-aac"
+  depends_on "freetype"
   depends_on "lame"
+  depends_on "libass"
   depends_on "libvorbis"
   depends_on "libvpx"
+  depends_on "openssl"
   depends_on "opus"
   depends_on "sdl2"
   depends_on "snappy"
@@ -53,12 +48,9 @@ class Ffmpeg < Formula
 
   depends_on "aom" => :optional
   depends_on "chromaprint" => :optional
-  depends_on "fdk-aac" => :optional
   depends_on "fontconfig" => :optional
-  depends_on "freetype" => :optional
   depends_on "frei0r" => :optional
   depends_on "game-music-emu" => :optional
-  depends_on "libass" => :optional
   depends_on "libbluray" => :optional
   depends_on "libbs2b" => :optional
   depends_on "libcaca" => :optional
@@ -72,7 +64,6 @@ class Ffmpeg < Formula
   depends_on "opencore-amr" => :optional
   depends_on "openh264" => :optional
   depends_on "openjpeg" => :optional
-  depends_on "openssl" => :optional
   depends_on "rtmpdump" => :optional
   depends_on "rubberband" => :optional
   depends_on "speex" => :optional
@@ -97,6 +88,8 @@ class Ffmpeg < Formula
       --host-ldflags=#{ENV.ldflags}
       --enable-ffplay
       --enable-gpl
+      --enable-libfdk-aac
+      --enable-libfreetype
       --enable-libmp3lame
       --enable-libopus
       --enable-libsnappy
@@ -107,6 +100,7 @@ class Ffmpeg < Formula
       --enable-libx265
       --enable-libxvid
       --enable-lzma
+      --enable-openssl
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
@@ -116,9 +110,7 @@ class Ffmpeg < Formula
     args << "--enable-libbluray" if build.with? "libbluray"
     args << "--enable-libbs2b" if build.with? "libbs2b"
     args << "--enable-libcaca" if build.with? "libcaca"
-    args << "--enable-libfdk-aac" if build.with? "fdk-aac"
     args << "--enable-libfontconfig" if build.with? "fontconfig"
-    args << "--enable-libfreetype" if build.with? "freetype"
     args << "--enable-libgme" if build.with? "game-music-emu"
     args << "--enable-libgsm" if build.with? "libgsm"
     args << "--enable-libmodplug" if build.with? "libmodplug"
@@ -140,7 +132,6 @@ class Ffmpeg < Formula
     args << "--enable-libzimg" if build.with? "zimg"
     args << "--enable-libzmq" if build.with? "zeromq"
     args << "--enable-opencl" if MacOS.version > :lion
-    args << "--enable-openssl" if build.with? "openssl"
     args << "--enable-videotoolbox" if MacOS.version >= :mountain_lion
 
     if build.with? "openjpeg"
